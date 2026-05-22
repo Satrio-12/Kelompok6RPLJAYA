@@ -15,8 +15,13 @@ export default async function handler(request, response) {
         if (blobs.length > 0) {
           // Sort descending by uploadedAt to get the LATEST file
           blobs.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
-          // Tambahkan cache busting pada URL
-          const res = await fetch(blobs[0].url + '?t=' + Date.now(), { cache: 'no-store' });
+          // Fetch dengan header otorisasi untuk Private Store
+          const res = await fetch(blobs[0].url + '?t=' + Date.now(), {
+            cache: 'no-store',
+            headers: {
+              'Authorization': `Bearer ${process.env.BLOB_READ_WRITE_TOKEN}`
+            }
+          });
           data = await res.json();
         }
       } catch (e) {
@@ -36,9 +41,9 @@ export default async function handler(request, response) {
     } else if (request.method === 'POST') {
       const fullDb = request.body;
       
-      // Upload file baru dengan suffix acak (agar terhindar dari CDN Cache Vercel)
+      // Upload file baru dengan suffix acak (mendukung Private Store)
       await put('db', JSON.stringify(fullDb), {
-        access: 'public',
+        access: 'private',
         addRandomSuffix: true,
         contentType: 'application/json'
       });
