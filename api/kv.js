@@ -3,6 +3,9 @@ import { put, list } from '@vercel/blob';
 // Menggunakan Vercel Blob sebagai database JSON sederhana
 // Karena Edge Config read-only via SDK, dan KV mungkin berbayar di akun tertentu.
 export default async function handler(request, response) {
+  // Prevent Vercel Edge Cache
+  response.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+  
   try {
     if (request.method === 'GET') {
       const keysStr = request.query.keys;
@@ -11,7 +14,7 @@ export default async function handler(request, response) {
       try {
         const { blobs } = await list({ prefix: 'db.json' });
         if (blobs.length > 0) {
-          const res = await fetch(blobs[0].url);
+          const res = await fetch(blobs[0].url, { cache: 'no-store' });
           data = await res.json();
         }
       } catch (e) {

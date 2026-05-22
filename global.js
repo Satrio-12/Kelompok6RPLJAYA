@@ -6,7 +6,7 @@
 async function syncFromKV() {
   const keys = ['eproc_users', 'eproc_catalog', 'eproc_budget', 'eproc_orders', 'eproc_notifications'];
   try {
-    const res = await fetch('/api/kv?keys=' + keys.join(','));
+    const res = await fetch('/api/kv?t=' + Date.now() + '&keys=' + keys.join(','), { cache: 'no-store' });
     if (res.ok) {
       const db = await res.json();
       let hasData = false;
