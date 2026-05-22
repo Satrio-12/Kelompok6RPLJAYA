@@ -165,7 +165,7 @@ function simulateEKatalogSync() {
         skp: 4.7
       };
       currentCatalog.push(syncProduct);
-      localStorage.setItem('eproc_catalog', JSON.stringify(currentCatalog));
+      window.saveToKV('eproc_catalog', currentCatalog);
       
       // Reload catalog items array
       loadCatalog();

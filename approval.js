@@ -256,7 +256,7 @@ function executeApprovalSuccess() {
       note: `Disetujui resmi oleh PPK ${user.name} menggunakan Tanda Tangan Elektronik terverifikasi BSrE.`
     });
 
-    localStorage.setItem('eproc_orders', JSON.stringify(orders));
+    window.saveToKV('eproc_orders', orders);
 
     // 2. Realize Budget sum subtraction (FR-26)
     const budgetObj = JSON.parse(localStorage.getItem('eproc_budget') || '{}');
@@ -273,7 +273,7 @@ function executeApprovalSuccess() {
       realisasi: approvedSum,
       sisa: totalPagu - approvedSum
     };
-    localStorage.setItem('eproc_budget', JSON.stringify(updatedBudget));
+    window.saveToKV('eproc_budget', updatedBudget);
 
     // 3. Emit trigger email notifications (FR-28, FR-29)
     addNotification(selectedPO.creator, `Purchase Order (${selectedPO.id}) Anda senilai ${formatRupiah(selectedPO.total)} telah DISETUJUI oleh PPK Ahmad Subarjo S.T. dengan stempel TTE resmi.`);
@@ -325,7 +325,7 @@ window.submitRejection = function() {
       note: `Pengajuan ditolak oleh PPK Ahmad Subarjo S.T. Alasan: "${notes}"`
     });
 
-    localStorage.setItem('eproc_orders', JSON.stringify(orders));
+    window.saveToKV('eproc_orders', orders);
 
     // Emit notification to creator (FR-29)
     addNotification(selectedPO.creator, `❌ Purchase Order (${selectedPO.id}) Anda DITOLAK oleh PPK. Alasan: "${notes}"`);

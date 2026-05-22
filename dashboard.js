@@ -42,7 +42,7 @@ function renderDashboardData() {
 
   // Update localStorage with updated calculations for consistency
   const updatedBudget = { totalPagu, realisasi, sisa };
-  localStorage.setItem('eproc_budget', JSON.stringify(updatedBudget));
+  window.saveToKV('eproc_budget', updatedBudget);
 
   // Display values
   document.getElementById('budget-total').innerText = formatRupiah(totalPagu);

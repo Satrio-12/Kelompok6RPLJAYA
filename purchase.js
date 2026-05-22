@@ -283,7 +283,7 @@ function submitDraftPO(poId) {
       note: 'Draft purchase order diajukan ke PPK oleh pembuat.'
     });
 
-    localStorage.setItem('eproc_orders', JSON.stringify(masterOrders));
+    window.saveToKV('eproc_orders', masterOrders);
 
     // Send notifications to PPK
     addNotification('ppk', `Terdapat Purchase Order (${poId}) baru diajukan oleh pembuat menunggu approval Anda.`);

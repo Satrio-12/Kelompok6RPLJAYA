@@ -73,7 +73,7 @@ window.toggleUserActivation = function(username) {
 
   if (index > -1) {
     users[index].active = !users[index].active;
-    localStorage.setItem('eproc_users', JSON.stringify(users));
+    window.saveToKV('eproc_users', users);
     
     const activeState = users[index].active;
     
@@ -156,7 +156,7 @@ window.saveUserForm = function(e) {
 
     const newUser = { username, name, role, active };
     users.push(newUser);
-    localStorage.setItem('eproc_users', JSON.stringify(users));
+    window.saveToKV('eproc_users', users);
     showToast(`Pengguna "${username}" sukses didaftarkan!`, 'success');
 
   } else {
@@ -167,7 +167,7 @@ window.saveUserForm = function(e) {
       users[index].role = role;
       users[index].active = active;
       
-      localStorage.setItem('eproc_users', JSON.stringify(users));
+      window.saveToKV('eproc_users', users);
       showToast(`Informasi profil "${editKey}" berhasil diperbarui.`, 'success');
     }
   }
@@ -186,7 +186,7 @@ window.deleteUser = function(username) {
   const users = JSON.parse(localStorage.getItem('eproc_users') || '[]');
   const filteredUsers = users.filter(u => u.username !== username);
 
-  localStorage.setItem('eproc_users', JSON.stringify(filteredUsers));
+  window.saveToKV('eproc_users', filteredUsers);
   showToast(`Akun pengguna "${username}" berhasil dihapus dari sistem.`, 'danger');
   
   loadUsers();

@@ -3,8 +3,41 @@
  * e-ProcureFlow Web Application
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  initializeDatabase();
+async function syncFromKV() {
+  const keys = ['eproc_users', 'eproc_catalog', 'eproc_budget', 'eproc_orders', 'eproc_notifications'];
+  try {
+    const res = await fetch('/api/kv?keys=' + keys.join(','));
+    if (res.ok) {
+      const db = await res.json();
+      let hasData = false;
+      keys.forEach(k => {
+        if (db[k]) {
+          localStorage.setItem(k, JSON.stringify(db[k]));
+          hasData = true;
+        }
+      });
+      return hasData;
+    }
+  } catch (error) {
+    console.error("Failed to sync from KV:", error);
+  }
+  return false;
+}
+
+window.saveToKV = function(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+  fetch('/api/kv', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key, value: data })
+  }).catch(e => console.error("KV Sync failed:", e));
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const hasData = await syncFromKV();
+  if (!hasData) {
+    initializeDatabase();
+  }
   injectLayout();
   setupNotifications();
 });
@@ -23,7 +56,7 @@ function initializeDatabase() {
       { username: 'pokja', name: 'Siti Aminah', role: 'Pokja', active: true }
     ];
     // Default passwords are username + 123 (e.g. admin123, ppk123)
-    localStorage.setItem('eproc_users', JSON.stringify(defaultUsers));
+    window.saveToKV('eproc_users', defaultUsers);
   }
 
   // --- SEED CATALOG PRODUCTS (FR-08, FR-10) ---
@@ -37,7 +70,7 @@ function initializeDatabase() {
       { id: 'PROD-006', name: 'Projektor Epson EB-X500 XGA', category: 'Peralatan Kantor', price: 6500000, provider: 'CV Epson Multi Raya', specs: '3600 Lumens, XGA Resolution, HDMI & USB, Contrast Ratio 16.000:1', availability: '15 Unit', skp: 3.8 },
       { id: 'PROD-007', name: 'Paket Lisensi Cloud Server AWS Government 1 Tahun', category: 'Infrastruktur IT', price: 450000000, provider: 'PT Amazon Web Services Indonesia', specs: 'EC2 Dedicated Host, RDS Database, 10TB S3 Storage, Managed Support', availability: 'Instan', skp: 4.9 }
     ];
-    localStorage.setItem('eproc_catalog', JSON.stringify(defaultCatalog));
+    window.saveToKV('eproc_catalog', defaultCatalog);
   }
 
   // --- SEED BUDGET LIMITS & REALIZATION (FR-15, FR-26) ---
@@ -47,7 +80,7 @@ function initializeDatabase() {
       realisasi: 1250000000,  // 1.25 Billion IDR
       sisa: 3750000000        // 3.75 Billion IDR
     };
-    localStorage.setItem('eproc_budget', JSON.stringify(defaultBudget));
+    window.saveToKV('eproc_budget', defaultBudget);
   }
 
   // --- SEED PURCHASE ORDERS (FR-13, FR-14, FR-18) ---
@@ -91,7 +124,7 @@ function initializeDatabase() {
         catatanPenolakan: ''
       }
     ];
-    localStorage.setItem('eproc_orders', JSON.stringify(defaultOrders));
+    window.saveToKV('eproc_orders', defaultOrders);
   }
 
   // --- SEED NOTIFICATIONS (FR-28, FR-29) ---
@@ -100,7 +133,7 @@ function initializeDatabase() {
       { id: 'NOT-001', recipient: 'ppk', message: 'Terdapat 1 Purchase Order (PO-2026-0002) baru yang membutuhkan approval Anda.', time: '2026-05-20 14:30', unread: true },
       { id: 'NOT-002', recipient: 'pengadaan', message: 'Purchase Order PO-2026-0001 Anda telah DISETUJUI oleh PPK.', time: '2026-05-11 10:15', unread: false }
     ];
-    localStorage.setItem('eproc_notifications', JSON.stringify(defaultNotifs));
+    window.saveToKV('eproc_notifications', defaultNotifs);
   }
 }
 
@@ -361,7 +394,7 @@ function addNotification(recipient, message) {
   };
 
   notifications.push(newNotif);
-  localStorage.setItem('eproc_notifications', JSON.stringify(notifications));
+  window.saveToKV('eproc_notifications', notifications);
   
   // Re-render
   renderNotifications();
@@ -378,7 +411,7 @@ function markNotificationsAsRead() {
       n.unread = false;
     }
   });
-  localStorage.setItem('eproc_notifications', JSON.stringify(notifications));
+  window.saveToKV('eproc_notifications', notifications);
   
   // Update badge immediately
   const badge = document.getElementById('notif-badge');
@@ -391,7 +424,7 @@ function clearNotifications() {
 
   let notifications = JSON.parse(localStorage.getItem('eproc_notifications') || '[]');
   notifications = notifications.filter(n => n.recipient !== user.username);
-  localStorage.setItem('eproc_notifications', JSON.stringify(notifications));
+  window.saveToKV('eproc_notifications', notifications);
   
   renderNotifications();
 }

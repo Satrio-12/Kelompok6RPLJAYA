@@ -218,7 +218,7 @@ window.checkoutPurchaseOrder = function(targetStatus) {
   // Save PO to DB
   const orders = JSON.parse(localStorage.getItem('eproc_orders') || '[]');
   orders.push(newPO);
-  localStorage.setItem('eproc_orders', JSON.stringify(orders));
+  window.saveToKV('eproc_orders', orders);
 
   // If submitted, alert PPK via system notifications (FR-17, FR-29)
   if (targetStatus === 'Menunggu Persetujuan') {

@@ -224,7 +224,7 @@ window.simulateLogisticsStep = function(nextStatus) {
       note: logNote
     });
 
-    localStorage.setItem('eproc_orders', JSON.stringify(orders));
+    window.saveToKV('eproc_orders', orders);
 
     // 2. Add dynamic operational alert notifications (FR-28, FR-29)
     addNotification(activeTrackingPO.creator, `🚚 Perubahan Status PO: ${activeTrackingPO.id} saat ini berstatus: ${nextStatus}.`);
