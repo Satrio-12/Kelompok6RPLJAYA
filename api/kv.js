@@ -15,13 +15,8 @@ export default async function handler(request, response) {
         if (blobs.length > 0) {
           // Sort descending by uploadedAt to get the LATEST file
           blobs.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
-          // Fetch dengan header otorisasi untuk Private Store
-          const res = await fetch(blobs[0].url + '?t=' + Date.now(), {
-            cache: 'no-store',
-            headers: {
-              'Authorization': `Bearer ${process.env.BLOB_READ_WRITE_TOKEN}`
-            }
-          });
+          // Fetch file LATEST (bisa diakses publik)
+          const res = await fetch(blobs[0].url + '?t=' + Date.now(), { cache: 'no-store' });
           data = await res.json();
         }
       } catch (e) {
@@ -41,9 +36,9 @@ export default async function handler(request, response) {
     } else if (request.method === 'POST') {
       const fullDb = request.body;
       
-      // Upload file baru dengan suffix acak (mendukung Private Store)
+      // Upload file baru dengan suffix acak
       await put('db', JSON.stringify(fullDb), {
-        access: 'private',
+        access: 'public',
         addRandomSuffix: true,
         contentType: 'application/json'
       });
