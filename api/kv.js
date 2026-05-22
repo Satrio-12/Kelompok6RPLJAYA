@@ -30,24 +30,10 @@ export default async function handler(request, response) {
       return response.status(200).json(data);
       
     } else if (request.method === 'POST') {
-      const { key, value } = request.body;
-      
-      let data = {};
-      try {
-        const { blobs } = await list({ prefix: 'db.json' });
-        if (blobs.length > 0) {
-          const res = await fetch(blobs[0].url);
-          data = await res.json();
-        }
-      } catch (e) {
-        // File belum ada
-      }
-      
-      // Update data
-      data[key] = value;
+      const fullDb = request.body;
       
       // Timpa db.json di Vercel Blob
-      await put('db.json', JSON.stringify(data), {
+      await put('db.json', JSON.stringify(fullDb), {
         access: 'public',
         addRandomSuffix: false,
         contentType: 'application/json'

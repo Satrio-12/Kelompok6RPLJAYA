@@ -232,7 +232,8 @@ window.checkoutPurchaseOrder = function(targetStatus) {
   localStorage.removeItem('eproc_cart');
 
   // Redirection delay
-  setTimeout(() => {
+  setTimeout(async () => {
+    if (window.waitForSave) await window.waitForSave();
     if (targetStatus === 'Menunggu Persetujuan') {
       window.location.href = `tracking.html?id=${poId}`;
     } else {

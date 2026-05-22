@@ -24,13 +24,39 @@ async function syncFromKV() {
   return false;
 }
 
+let saveTimeout = null;
+let savePromise = null;
+
 window.saveToKV = function(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
-  fetch('/api/kv', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ key, value: data })
-  }).catch(e => console.error("KV Sync failed:", e));
+  
+  if (saveTimeout) clearTimeout(saveTimeout);
+  
+  savePromise = new Promise((resolve) => {
+    saveTimeout = setTimeout(async () => {
+      const keys = ['eproc_users', 'eproc_catalog', 'eproc_budget', 'eproc_orders', 'eproc_notifications'];
+      const fullDb = {};
+      keys.forEach(k => {
+        const item = localStorage.getItem(k);
+        if (item) fullDb[k] = JSON.parse(item);
+      });
+
+      try {
+        await fetch('/api/kv', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(fullDb)
+        });
+      } catch (e) {
+        console.error("KV Sync failed:", e);
+      }
+      resolve();
+    }, 500);
+  });
+};
+
+window.waitForSave = async function() {
+  if (savePromise) await savePromise;
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
