@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lacak Progress - e-ProcureFlow</title>
+  <link rel="stylesheet" href="global.css">
+  <link rel="stylesheet" href="tracking.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar dynamically injected here -->
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <!-- Top Navbar dynamically injected here -->
+      <div id="navbar-container"></div>
+
+      <div class="tracking-search-board glass-card">
+        <h3>Lacak Dokumen Transaksi Pengadaan</h3>
+        <p class="section-desc">Masukkan ID Purchase Order untuk melacak tahapan real-time pengiriman dan persetujuan barang.</p>
+        
+        <div class="search-tracking-box">
+          <input type="text" id="tracking-search-input" placeholder="Contoh: PO-2026-0001">
+          <button class="btn btn-primary" onclick="searchPOTracking()">Lacak</button>
+        </div>
+      </div>
+
+      <!-- Main Tracking Layout -->
+      <div class="tracking-result-layout" id="tracking-result-area" style="display: none;">
+        
+        <!-- Left Column: Detailed Timeline Progress (FR-24, FR-25) -->
+        <div class="glass-card timeline-card">
+          <div class="timeline-card-header">
+            <h3>Timeline Alur Pengadaan</h3>
+            <span class="badge" id="tracking-badge-status">Draft</span>
+          </div>
+
+          <div class="vertical-timeline" id="vertical-timeline-steps">
+            <!-- Timeline steps generated in JS with pulsing highlights -->
+          </div>
+        </div>
+
+        <!-- Right Column: Info PO Summary & Simulation Tools -->
+        <div class="tracking-details-panel">
+          
+          <!-- Summary info sheet -->
+          <div class="glass-card summary-info-card">
+            <h3>Detail Pengadaan PO</h3>
+            <p class="section-desc" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; margin-bottom: 14px;">Ringkasan item transaksi yang dilacak.</p>
+            
+            <div class="info-details-list">
+              <div class="detail-line">
+                <span>Nomor PO:</span>
+                <span id="detail-po-id" style="font-weight: 700; color: var(--primary);">PO-2026-XXXX</span>
+              </div>
+              <div class="detail-line">
+                <span>Pembuat PO:</span>
+                <span id="detail-po-creator">-</span>
+              </div>
+              <div class="detail-line">
+                <span>Nilai Transaksi:</span>
+                <span id="detail-po-total" style="font-weight: 600; color: #fff;">Rp 0</span>
+              </div>
+              <div class="detail-line" id="detail-bsre-row" style="display: none; border-top: 1px dashed var(--success-glow); padding-top: 10px; margin-top: 10px; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <span style="color: var(--success); font-weight: 600;">🔒 TTE BSrE Aktif</span>
+                <span id="detail-bsre-hash" style="font-family: monospace; font-size: 0.72rem; color: var(--text-muted); word-break: break-all;">SHA-256: ...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Logistical Operations Simulation Control Center (FR-25) -->
+          <div class="glass-card simulation-controls-card" id="simulation-panel" style="display: none;">
+            <div class="sim-header">
+              <span class="sim-icon">🚀</span>
+              <h4>Panel Simulasi Operasi Logistik</h4>
+            </div>
+            <p class="section-desc">Sebagai Pejabat Pengadaan, Anda dapat memperbarui status logistik PO ini secara real-time untuk melihat perubahan alur timeline.</p>
+            
+            <div class="sim-actions-grid">
+              <button class="btn btn-secondary sim-btn" id="sim-btn-process" onclick="simulateLogisticsStep('Diproses')">
+                <span>⚙️</span> Proses Barang
+              </button>
+              <button class="btn btn-secondary sim-btn" id="sim-btn-ship" onclick="simulateLogisticsStep('Dikirim')">
+                <span>🚚</span> Kirim Barang
+              </button>
+              <button class="btn btn-success sim-btn" id="sim-btn-complete" onclick="simulateLogisticsStep('Selesai')">
+                <span>✅</span> Selesaikan Pengadaan
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Case when PO ID is not found -->
+      <div class="glass-card not-found-card" id="tracking-error-card" style="display: none; text-align: center; padding: 60px 40px; margin-top: 20px;">
+        <span style="font-size: 3rem; display: block; margin-bottom: 20px;">🔍</span>
+        <h4>Dokumen Purchase Order Tidak Ditemukan</h4>
+        <p class="section-desc" style="max-width: 400px; margin: 10px auto;">Silakan periksa kembali ID PO yang dimasukkan atau cari di tab <a href="purchase.html" style="color: var(--primary); font-weight: 500;">Purchase Orders</a>.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="global.js"></script>
+  <script src="tracking.js"></script>
+</body>
+</html>

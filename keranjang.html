@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keranjang Belanja - e-ProcureFlow</title>
+  <link rel="stylesheet" href="global.css">
+  <link rel="stylesheet" href="keranjang.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar dynamically injected here -->
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <!-- Top Navbar dynamically injected here -->
+      <div id="navbar-container"></div>
+
+      <!-- Checkout Container -->
+      <div class="checkout-grid">
+        
+        <!-- Left: Items list in cart -->
+        <div class="glass-card cart-items-card">
+          <h3>Item Belanja Pengadaan</h3>
+          <p class="section-desc">Daftar barang yang dipilih dari e-Katalog untuk diproses ke Purchase Order.</p>
+          
+          <div class="table-container" style="border: none; background: transparent;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Produk</th>
+                  <th>Penyedia</th>
+                  <th>Harga Satuan</th>
+                  <th style="width: 120px; text-align: center;">Jumlah</th>
+                  <th>Subtotal</th>
+                  <th style="text-align: center;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="cart-table-body">
+                <!-- Dynamically rendered -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right: Budget validation & Action Panel -->
+        <div class="checkout-actions-panel">
+          
+          <!-- SKP Crosscheck Alert Banner (FR-16) -->
+          <div class="glass-card validation-card warning-card" id="skp-warning-banner" style="display: none;">
+            <div class="validation-header">
+              <span class="warning-icon">⚠️</span>
+              <h4>Peringatan Kinerja Penyedia (SKP)</h4>
+            </div>
+            <p class="warning-desc">Salah satu penyedia barang di keranjang Anda memiliki nilai kinerja SKP di bawah standar (SKP < 2.5). Berdasarkan regulasi LKPP, Anda diwajibkan menulis dokumen justifikasi alasan pemilihan penyedia ini sebelum mengajukan PO.</p>
+            <div class="form-group" style="margin-top: 12px; margin-bottom: 0;">
+              <textarea id="skp-justification" class="form-control" rows="2" placeholder="Tuliskan justifikasi teknis di sini..."></textarea>
+            </div>
+          </div>
+
+          <!-- Budget limit check card (FR-15) -->
+          <div class="glass-card validation-card budget-validation-card">
+            <h3>Validasi Pagu Anggaran</h3>
+            <p class="section-desc">Pemeriksaan kecukupan pagu unit sebelum checkout transaksi.</p>
+            
+            <div class="budget-info-lines">
+              <div class="info-line">
+                <span>Sisa Pagu Saat Ini:</span>
+                <span id="valid-budget-remaining" style="font-weight: 600;">Rp 0</span>
+              </div>
+              <div class="info-line">
+                <span>Total Belanja:</span>
+                <span id="valid-cart-total" class="text-primary" style="font-weight: 700; font-size: 1.1rem;">Rp 0</span>
+              </div>
+              <div class="info-line" style="border-top: 1px solid var(--glass-border); padding-top: 12px;">
+                <span>Proyeksi Sisa Pagu:</span>
+                <span id="valid-budget-projected" style="font-weight: 600;">Rp 0</span>
+              </div>
+            </div>
+
+            <!-- Custom Budget Threshold visual warning meter -->
+            <div class="budget-meter-container">
+              <div class="premium-progress-bar" style="height: 8px;">
+                <div class="progress-fill" id="valid-budget-fill" style="width: 0%;"></div>
+              </div>
+              <div id="valid-status-message" class="budget-status-message text-success">
+                ✅ Anggaran mencukupi. Pengadaan dapat dilanjutkan.
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Controls Panel (FR-13, FR-14, FR-17) -->
+          <div class="glass-card checkout-summary-card">
+            <h3>Ringkasan Dokumen PO</h3>
+            <p class="section-desc">Purchase Order akan dibuat dengan rincian total belanja tersebut.</p>
+            
+            <div class="summary-totals">
+              <div class="total-row">
+                <span>Jumlah Item:</span>
+                <span id="summary-qty">0 unit</span>
+              </div>
+              <div class="total-row large">
+                <span>Total Estimasi:</span>
+                <span id="summary-total">Rp 0</span>
+              </div>
+            </div>
+
+            <div class="action-buttons-group">
+              <button class="btn btn-primary" id="btn-submit-po" onclick="checkoutPurchaseOrder('Menunggu Persetujuan')">Kirim untuk Approval PPK</button>
+              <button class="btn btn-secondary" id="btn-draft-po" onclick="checkoutPurchaseOrder('Draft')">Simpan sebagai Draft PO</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="global.js"></script>
+  <script src="keranjang.js"></script>
+</body>
+</html>

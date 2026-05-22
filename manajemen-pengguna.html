@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kelola Pengguna - e-ProcureFlow</title>
+  <link rel="stylesheet" href="global.css">
+  <link rel="stylesheet" href="manajemen-pengguna.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar dynamically injected here -->
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <!-- Top Navbar dynamically injected here -->
+      <div id="navbar-container"></div>
+
+      <!-- Action and stats bar -->
+      <div class="users-board-controls glass-card">
+        <div>
+          <h3>Daftar Pengguna Sistem</h3>
+          <p class="section-desc">Kelola akun, edit peranan (role-based access control), dan aktifkan/nonaktifkan hak akses masuk pengguna.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openAddUserModal()">
+          <span>➕</span> Tambah Pengguna Baru
+        </button>
+      </div>
+
+      <!-- Users master table (FR-05) -->
+      <div class="glass-card table-wrapper-card">
+        <div class="table-container" style="border: none; background: transparent;">
+          <table>
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Nama Lengkap</th>
+                <th>Peranan (Role)</th>
+                <th style="text-align: center;">Status Akun</th>
+                <th style="text-align: center; width: 180px;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Add / Edit User Modal Dialog (FR-05, FR-06) -->
+  <div class="modal-overlay" id="user-form-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-form-title">Tambah Pengguna Baru</h3>
+        <button class="modal-close" onclick="closeUserFormModal()">&times;</button>
+      </div>
+      <form id="user-form" onsubmit="saveUserForm(event)">
+        <!-- Hidden input for identifying edit index -->
+        <input type="hidden" id="edit-username-key">
+        
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="form-username">Username</label>
+            <input type="text" id="form-username" class="form-control" placeholder="Contoh: budi_ppk" required>
+          </div>
+          <div class="form-group">
+            <label for="form-name">Nama Lengkap</label>
+            <input type="text" id="form-name" class="form-control" placeholder="Contoh: Budi Santoso S.E." required>
+          </div>
+          <div class="form-group">
+            <label for="form-role">Peranan (Role-Based Access)</label>
+            <select id="form-role" class="form-control select-dropdown-modal" required>
+              <option value="Admin">Admin</option>
+              <option value="PA/KPA">PA/KPA (Pengguna Anggaran)</option>
+              <option value="PPK">PPK (Pejabat Pembuat Komitmen)</option>
+              <option value="Pejabat Pengadaan">Pejabat Pengadaan</option>
+              <option value="Pokja">Pokja (Kelompok Kerja)</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex-direction: row; align-items: center; gap: 12px; margin-top: 10px;">
+            <label class="switch">
+              <input type="checkbox" id="form-active" checked>
+              <span class="slider round"></span>
+            </label>
+            <span style="font-size: 0.9rem; font-weight: 500;">Aktifkan Akun Langsung</span>
+          </div>
+        </div>
+        
+        <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--glass-border); padding-top: 16px;">
+          <button type="button" class="btn btn-secondary" onclick="closeUserFormModal()">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="global.js"></script>
+  <script src="manajemen-pengguna.js"></script>
+</body>
+</html>

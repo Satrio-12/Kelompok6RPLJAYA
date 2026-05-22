@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purchase Orders - e-ProcureFlow</title>
+  <link rel="stylesheet" href="global.css">
+  <link rel="stylesheet" href="purchase.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar dynamically injected here -->
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <!-- Top Navbar dynamically injected here -->
+      <div id="navbar-container"></div>
+
+      <!-- Purchase Orders Controls Board -->
+      <div class="purchase-board-controls glass-card">
+        <div class="status-tabs-row" id="po-status-tabs">
+          <button class="status-tab active" onclick="filterPOStatus('All')">Semua Transaksi</button>
+          <button class="status-tab" onclick="filterPOStatus('Draft')">Draft PO</button>
+          <button class="status-tab" onclick="filterPOStatus('Menunggu Persetujuan')">Menunggu PPK</button>
+          <button class="status-tab" onclick="filterPOStatus('Disetujui')">Disetujui</button>
+          <button class="status-tab" onclick="filterPOStatus('Ditolak')">Ditolak</button>
+        </div>
+      </div>
+
+      <!-- Purchase Orders Lists -->
+      <div class="po-cards-container" id="po-cards-container">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive PO Document Viewer Modal (Official Invoice View) -->
+  <div class="modal-overlay" id="po-document-modal">
+    <div class="modal-content large-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Dokumen Resmi Purchase Order</h3>
+        <button class="modal-close" onclick="closePODocumentModal()">&times;</button>
+      </div>
+      
+      <div class="modal-body doc-modal-body" id="po-document-print-area">
+        <!-- Official Indonesian e-Procurement Invoice Sheet (Handcrafted design) -->
+        <div class="official-invoice-sheet" id="invoice-sheet-body">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+      
+      <div class="modal-footer invoice-footer-actions">
+        <button class="btn btn-secondary" onclick="closePODocumentModal()">Tutup</button>
+        <button class="btn btn-secondary" onclick="simulatePrintPO()"><span style="margin-right: 4px;">🖨️</span> Cetak / Unduh PDF</button>
+        <button class="btn btn-primary" id="modal-btn-submit-draft" style="display: none;">Ajukan PO ke PPK</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="global.js"></script>
+  <script src="purchase.js"></script>
+</body>
+</html>

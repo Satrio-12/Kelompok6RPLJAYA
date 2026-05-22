@@ -1,0 +1,196 @@
+/* keranjang.css - Checkout & Validations visuals */
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cart-items-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Table controls inside cart */
+.qty-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.qty-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: var(--transition-fast);
+  padding: 0 4px;
+}
+
+.qty-btn:hover {
+  color: #fff;
+}
+
+.qty-val {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  min-width: 24px;
+  text-align: center;
+}
+
+.delete-item-btn {
+  background: transparent;
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px;
+  border-radius: 4px;
+  transition: var(--transition-fast);
+}
+
+.delete-item-btn:hover {
+  background: var(--danger-glow);
+}
+
+/* Right checkout side-cards */
+.checkout-actions-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.validation-card {
+  border-left: 4px solid var(--primary);
+}
+
+/* Warning card for SKP rules */
+.warning-card {
+  border-left-color: var(--warning);
+  background: rgba(245, 158, 11, 0.02);
+}
+
+.validation-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.warning-icon {
+  font-size: 1.4rem;
+}
+
+.validation-header h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.warning-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Budget Validation card */
+.budget-validation-card {
+  border-left-color: var(--primary);
+}
+
+.budget-info-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.info-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.info-line span:last-child {
+  color: #fff;
+}
+
+.budget-meter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.budget-status-message {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.budget-status-message.text-danger {
+  color: var(--danger);
+}
+
+/* Summary Checkout card */
+.summary-totals {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.total-row span:last-child {
+  color: #fff;
+}
+
+.total-row.large {
+  font-size: 1rem;
+}
+
+.total-row.large span:first-child {
+  font-weight: 600;
+  color: #fff;
+}
+
+.total-row.large span:last-child {
+  font-size: 1.3rem;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.action-buttons-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-buttons-group button {
+  width: 100%;
+}

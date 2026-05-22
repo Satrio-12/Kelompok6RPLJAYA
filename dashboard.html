@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - e-ProcureFlow</title>
+  <link rel="stylesheet" href="global.css">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar dynamically injected here -->
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <!-- Top Navbar dynamically injected here -->
+      <div id="navbar-container"></div>
+
+      <!-- Dashboard Grid Layout -->
+      <div class="dashboard-grid">
+        
+        <!-- Row 1: Key Metrics Counters (FR-23) -->
+        <div class="metric-card glass-card">
+          <div class="metric-info">
+            <span class="metric-label">Draft PO</span>
+            <h2 class="metric-value" id="count-draft">0</h2>
+          </div>
+          <div class="metric-icon bg-draft">📄</div>
+        </div>
+
+        <div class="metric-card glass-card">
+          <div class="metric-info">
+            <span class="metric-label">Menunggu PPK</span>
+            <h2 class="metric-value text-warning" id="count-pending">0</h2>
+          </div>
+          <div class="metric-icon bg-pending">⏳</div>
+        </div>
+
+        <div class="metric-card glass-card">
+          <div class="metric-info">
+            <span class="metric-label">Disetujui PPK</span>
+            <h2 class="metric-value text-success" id="count-approved">0</h2>
+          </div>
+          <div class="metric-icon bg-approved">✅</div>
+        </div>
+
+        <div class="metric-card glass-card">
+          <div class="metric-info">
+            <span class="metric-label">Total Transaksi</span>
+            <h2 class="metric-value text-primary" id="count-total">0</h2>
+          </div>
+          <div class="metric-icon bg-primary-light">💼</div>
+        </div>
+
+      </div>
+
+      <!-- Row 2: Visual Chart & Budget Allocation Area (FR-26) -->
+      <div class="dashboard-details">
+        
+        <!-- Left: Budget Utilization Meter -->
+        <div class="glass-card budget-section">
+          <h3>Monitoring Realisasi Anggaran (Pagu vs Realisasi)</h3>
+          <p class="section-desc">Visualisasi sisa pagu anggaran dinamis terhadap realisasi pengadaan yang disetujui.</p>
+          
+          <div class="budget-progress-container">
+            <div class="budget-values">
+              <div>
+                <span class="label">Total Pagu Unit</span>
+                <h4 id="budget-total">Rp 0</h4>
+              </div>
+              <div style="text-align: right;">
+                <span class="label">Total Realisasi</span>
+                <h4 id="budget-realized" class="text-success">Rp 0</h4>
+              </div>
+            </div>
+
+            <!-- Custom Linear Budget Meter -->
+            <div class="premium-progress-bar">
+              <div class="progress-fill" id="budget-progress-fill" style="width: 0%;"></div>
+            </div>
+
+            <div class="budget-footer">
+              <span>Sisa Pagu Tersedia: <strong id="budget-remaining">Rp 0</strong></span>
+              <span id="budget-percentage">0% Terpakai</span>
+            </div>
+          </div>
+
+          <!-- Quick statistics details -->
+          <div class="budget-stats-grid">
+            <div class="sub-stat">
+              <span>Rata-Rata Nilai PO</span>
+              <h4 id="stat-avg-po">Rp 0</h4>
+            </div>
+            <div class="sub-stat">
+              <span>Penyedia Terpilih</span>
+              <h4 id="stat-count-providers">0 Penyedia</h4>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Handcrafted SVG Chart Performance (FR-23) -->
+        <div class="glass-card chart-section">
+          <h3>Statistik Status Purchase Order</h3>
+          <p class="section-desc">Distribusi persentase status dari semua transaksi e-Purchasing.</p>
+          
+          <div class="chart-container">
+            <!-- Custom Donut Chart using SVG elements -->
+            <svg class="donut-chart" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" class="chart-track"></circle>
+              <!-- Filled circle arcs rendered dynamically in JS -->
+              <circle cx="50" cy="50" r="40" class="chart-fill" id="donut-fill-approved" stroke-dasharray="0 251.2" stroke-dashoffset="0"></circle>
+              <circle cx="50" cy="50" r="40" class="chart-fill" id="donut-fill-pending" stroke-dasharray="0 251.2" stroke-dashoffset="0"></circle>
+              <circle cx="50" cy="50" r="40" class="chart-fill" id="donut-fill-draft" stroke-dasharray="0 251.2" stroke-dashoffset="0"></circle>
+              
+              <g class="donut-text">
+                <text x="50" y="47" class="donut-percent" id="donut-center-val">0%</text>
+                <text x="50" y="62" class="donut-sub">Disetujui</text>
+              </g>
+            </svg>
+
+            <!-- Chart Legends -->
+            <div class="chart-legends">
+              <div class="legend-item">
+                <span class="dot bg-success"></span>
+                <span>Disetujui (<strong id="percent-approved">0%</strong>)</span>
+              </div>
+              <div class="legend-item">
+                <span class="dot bg-warning"></span>
+                <span>Menunggu PPK (<strong id="percent-pending">0%</strong>)</span>
+              </div>
+              <div class="legend-item">
+                <span class="dot bg-draft"></span>
+                <span>Draft PO (<strong id="percent-draft">0%</strong>)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Row 3: Recent Activity / Purchase Order Timeline (FR-24) -->
+      <div class="glass-card recent-activity-section">
+        <div class="section-header">
+          <h3>Aktivitas Pengadaan Terbaru</h3>
+          <a href="purchase.html" class="btn btn-secondary btn-sm">Lihat Semua PO</a>
+        </div>
+        <div class="table-container" style="margin-top: 20px;">
+          <table>
+            <thead>
+              <tr>
+                <th>ID Transaksi</th>
+                <th>Tanggal</th>
+                <th>Pembuat</th>
+                <th>Penyedia</th>
+                <th>Nilai Pengadaan</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="recent-orders-table">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="global.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

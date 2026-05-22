@@ -1,0 +1,58 @@
+/* manajemen-pengguna.css - Admin control panel styles */
+
+.users-board-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.table-wrapper-card {
+  padding: 8px 16px;
+}
+
+/* Toggle custom inside table cell */
+.status-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.select-dropdown-modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+  color: white;
+  width: 100%;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.select-dropdown-modal option {
+  background: var(--bg-secondary);
+  color: white;
+}
+
+/* Action button configurations */
+.user-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.user-actions button {
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .users-board-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .users-board-controls button {
+    width: 100%;
+  }
+}

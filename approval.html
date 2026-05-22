@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Approval PPK - e-ProcureFlow</title>
+  <link rel="stylesheet" href="global.css">
+  <link rel="stylesheet" href="approval.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar dynamically injected here -->
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <!-- Top Navbar dynamically injected here -->
+      <div id="navbar-container"></div>
+
+      <!-- Delegation toggle panel (FR-21) -->
+      <div class="delegation-bar glass-card" id="delegation-panel" style="display: none;">
+        <div class="delegation-info">
+          <span>🛡️ <strong>Delegasi Approval PPK</strong></span>
+          <p class="section-desc" style="margin-bottom: 0; margin-top: 4px;">Aktifkan untuk mendelegasikan wewenang persetujuan PO secara penuh kepada PA/KPA.</p>
+        </div>
+        <div class="toggle-container">
+          <label class="switch">
+            <input type="checkbox" id="delegation-toggle-checkbox" onchange="toggleDelegation()">
+            <span class="slider round"></span>
+          </label>
+          <span id="delegation-status-label" style="font-size: 0.85rem; font-weight: 600;">Tidak Aktif</span>
+        </div>
+      </div>
+
+      <!-- Approval Cards Board -->
+      <div class="approval-board-layout">
+        
+        <!-- Left: List of submitted POs -->
+        <div class="glass-card approvals-list-card">
+          <h3>Daftar Pengajuan Transaksi</h3>
+          <p class="section-desc">Semua Purchase Order yang diajukan oleh Pejabat Pengadaan menunggu verifikasi Anda.</p>
+          
+          <div class="approvals-cards-stack" id="approvals-cards-stack">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Right: Side-by-side Review Panel -->
+        <div class="glass-card approval-review-panel" id="review-panel-container">
+          <div class="empty-review-state" id="empty-review-state">
+            <span>📋</span>
+            <h4>Pilih Purchase Order</h4>
+            <p>Klik tombol "Verifikasi" pada salah satu pengajuan untuk membuka dokumen perbandingan pengadaan secara side-by-side.</p>
+          </div>
+          
+          <div class="review-active-state" id="active-review-state" style="display: none;">
+            <div class="review-header">
+              <h3 id="review-po-id">PO-2026-XXXX</h3>
+              <span class="badge badge-pending">Menunggu Persetujuan</span>
+            </div>
+            
+            <div class="review-meta-info">
+              <p>Pembuat: <strong id="review-po-creator">pengadaan</strong></p>
+              <p>Tanggal Pengajuan: <strong id="review-po-date">2026-05-23</strong></p>
+            </div>
+
+            <!-- Items checklist comparing specs -->
+            <div class="review-items-checklist">
+              <h4>Daftar Barang & Spesifikasi Teknis:</h4>
+              <div id="review-items-list-container">
+                <!-- Items dynamic list -->
+              </div>
+            </div>
+
+            <!-- Justification details if SKP is low -->
+            <div id="review-skp-warning" class="skp-review-warning" style="display: none;">
+              <h5>⚠️ Catatan Khusus SKP Penyedia Rendah</h5>
+              <p id="review-skp-justification-text"></p>
+            </div>
+
+            <div class="review-summary-box">
+              <span>Total Nilai Pengadaan:</span>
+              <h2 id="review-po-total">Rp 0</h2>
+            </div>
+
+            <!-- Actions block -->
+            <div class="review-actions-group">
+              <button class="btn btn-success" id="btn-approve" onclick="openBSrEModal()">Setujui & Tanda Tangan TTE</button>
+              <button class="btn btn-danger" id="btn-reject" onclick="openRejectModal()">Tolak Pengajuan</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 1: BSrE Digital Passphrase Input (FR-22) -->
+  <div class="modal-overlay" id="bsre-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Sertifikasi Tanda Tangan Digital BSrE</h3>
+        <button class="modal-close" onclick="closeBSrEModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="bsre-info-banner">
+          <span style="font-size: 1.8rem;">🔒</span>
+          <div>
+            <h5>Koneksi BSrE Terenkripsi</h5>
+            <p>Otoritas Sertifikasi Balai Sertifikasi Elektronik Badan Siber dan Sandi Negara (BSSN) Indonesia.</p>
+          </div>
+        </div>
+
+        <div id="bsre-error" class="alert alert-danger" style="display: none;">
+          PIN / Passphrase Tanda Tangan Digital salah!
+        </div>
+
+        <div class="form-group" style="margin-top: 16px;">
+          <label for="bsre-passphrase">Passphrase / PIN Sertifikat TTE</label>
+          <input type="password" id="bsre-passphrase" class="form-control" placeholder="Masukkan PIN TTE Anda (Demo: ppk123)" required>
+        </div>
+
+        <!-- Simulation Progress Overlay -->
+        <div class="bsre-loading-overlay" id="bsre-loading-view" style="display: none;">
+          <div class="spinner" style="font-size: 2.2rem; margin-bottom: 12px;">🌀</div>
+          <h5 id="bsre-loading-text">Menghubungkan Otoritas Sertifikat...</h5>
+          <div class="progress-bar-container" style="width: 80%; background: rgba(255,255,255,0.05); height: 6px; border-radius: 4px; overflow: hidden; margin-top: 12px; border: 1px solid var(--glass-border);">
+            <div class="progress-fill" id="bsre-progress-bar" style="width: 0%; height: 100%;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--glass-border); padding-top: 16px;">
+        <button class="btn btn-secondary" onclick="closeBSrEModal()">Batal</button>
+        <button class="btn btn-primary" onclick="processBSrESignature()">Verifikasi & Tanda Tangani</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Rejection Notes modal (FR-20) -->
+  <div class="modal-overlay" id="reject-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Tolak Purchase Order</h3>
+        <button class="modal-close" onclick="closeRejectModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="section-desc">Masukkan alasan penolakan Purchase Order. Alasan ini akan tercatat resmi pada riwayat dokumen.</p>
+        <div class="form-group">
+          <label for="reject-notes">Catatan Penolakan (Catatan Resmi)</label>
+          <textarea id="reject-notes" class="form-control" rows="4" placeholder="Tuliskan alasan teknis penolakan transaksi di sini..." required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--glass-border); padding-top: 16px;">
+        <button class="btn btn-secondary" onclick="closeRejectModal()">Batal</button>
+        <button class="btn btn-danger" onclick="submitRejection()">Kirim Penolakan</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="global.js"></script>
+  <script src="approval.js"></script>
+</body>
+</html>

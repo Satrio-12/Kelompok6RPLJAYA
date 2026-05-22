@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - e-ProcureFlow</title>
+  <link rel="stylesheet" href="global.css">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="login-container">
+    <!-- Left Hero Section (Brand & Welcome) -->
+    <div class="login-hero">
+      <div class="hero-glow"></div>
+      <div class="hero-content">
+        <div class="hero-brand">
+          <div class="hero-logo">e</div>
+          <span class="hero-title">e-ProcureFlow</span>
+        </div>
+        <h1 class="hero-tagline">Sistem Informasi Pengadaan & e-Purchasing Pemerintah</h1>
+        <p class="hero-desc">Platform transparan, akuntabel, dan terintegrasi untuk mempercepat transaksi katalog elektronik, validasi anggaran, dan persetujuan tanda tangan digital.</p>
+        
+        <div class="hero-features">
+          <div class="feature-item">
+            <span class="feature-icon">🛡️</span>
+            <div>
+              <h4>Validasi Pagu Otomatis</h4>
+              <p>Mencegah transaksi melebihi pagu unit kerja.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✍️</span>
+            <div>
+              <h4>Tanda Tangan Digital BSrE</h4>
+              <p>Approval Purchase Order resmi terverifikasi BSrE.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Section (Login Form) -->
+    <div class="login-form-section">
+      <div class="glass-card login-card">
+        <div class="card-header">
+          <h2>Masuk ke Sistem</h2>
+          <p>Masukkan username dan kata sandi Anda</p>
+        </div>
+
+        <div id="login-error" class="alert alert-danger" style="display: none;">
+          Username atau password salah!
+        </div>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" class="form-control" placeholder="Masukkan username Anda" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Masuk</button>
+        </form>
+
+        <!-- Demo Accounts Quick Fill Panel -->
+        <div class="demo-accounts-panel">
+          <h4 class="demo-title">Akun Uji Coba (Demo):</h4>
+          <div class="demo-grid">
+            <button class="demo-badge" onclick="fillCredentials('admin', 'admin123')">
+              <span>Admin</span> <small>(Kelola User)</small>
+            </button>
+            <button class="demo-badge" onclick="fillCredentials('pengadaan', 'pejabat123')">
+              <span>Pejabat Pengadaan</span> <small>(Buat PO)</small>
+            </button>
+            <button class="demo-badge" onclick="fillCredentials('ppk', 'ppk123')">
+              <span>PPK</span> <small>(Approve PO / TTE)</small>
+            </button>
+            <button class="demo-badge" onclick="fillCredentials('pakpa', 'pa123')">
+              <span>PA/KPA</span> <small>(Pagu & Delegasi)</small>
+            </button>
+            <button class="demo-badge" onclick="fillCredentials('pokja', 'pokja123')">
+              <span>Pokja</span> <small>(Reviewer)</small>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="global.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+/* tracking.css - Real-time tracking and timeline styles */
+
+.tracking-search-board {
+  margin-bottom: 24px;
+}
+
+.search-tracking-box {
+  display: flex;
+  gap: 12px;
+  max-width: 500px;
+  margin-top: 16px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--glass-border);
+  padding: 6px;
+  border-radius: var(--radius-sm);
+}
+
+.search-tracking-box input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  width: 100%;
+  padding: 10px 12px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
+.search-tracking-box input:focus {
+  outline: none;
+}
+
+/* Result panel grid */
+.tracking-result-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .tracking-result-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.timeline-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+/* Vertical Timeline Nodes (FR-24, FR-25) */
+.vertical-timeline {
+  position: relative;
+  padding-left: 36px;
+  margin-left: 12px;
+}
+
+.vertical-timeline::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.timeline-step {
+  position: relative;
+  margin-bottom: 28px;
+}
+
+.timeline-step:last-child {
+  margin-bottom: 0;
+}
+
+/* Active timeline connecting line glow */
+.timeline-step::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: -36px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  border: 2px solid var(--glass-border);
+  transform: translateX(-50%);
+  z-index: 2;
+  transition: var(--transition-smooth);
+}
+
+/* Active / Done step highlights */
+.timeline-step.done::before {
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.timeline-step.active::before {
+  background: var(--warning);
+  border-color: var(--warning);
+  box-shadow: 0 0 12px var(--warning-glow);
+  animation: pulseGlow 1.8s infinite;
+}
+
+.timeline-step.rejected::before {
+  background: var(--danger);
+  border-color: var(--danger);
+  box-shadow: 0 0 12px var(--danger-glow);
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+
+/* Text inside timeline step */
+.step-title-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.step-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.timeline-step.done .step-title, 
+.timeline-step.active .step-title {
+  color: #fff;
+}
+
+.timeline-step.rejected .step-title {
+  color: var(--danger);
+}
+
+.step-date {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.step-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.timeline-step.done .step-desc,
+.timeline-step.active .step-desc {
+  color: var(--text-main);
+}
+
+/* Right detail cards */
+.tracking-details-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.detail-line span:last-child {
+  color: #fff;
+}
+
+/* Simulated panel */
+.simulation-controls-card {
+  border-left: 4px solid var(--secondary);
+}
+
+.sim-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sim-icon {
+  font-size: 1.4rem;
+}
+
+.sim-header h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.sim-actions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.sim-btn {
+  justify-content: flex-start;
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  border-radius: 6px;
+}
+
+.sim-btn span {
+  margin-right: 8px;
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>e-Katalog Barang - e-ProcureFlow</title>
+  <link rel="stylesheet" href="global.css">
+  <link rel="stylesheet" href="katalog.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar dynamically injected here -->
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <!-- Top Navbar dynamically injected here -->
+      <div id="navbar-container"></div>
+
+      <!-- Catalog Top Bar Controls -->
+      <div class="catalog-control-panel glass-card">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="Cari nama barang, penyedia, spesifikasi...">
+        </div>
+
+        <div class="filters-row">
+          <div class="filter-select-group">
+            <select id="filter-category" class="form-control select-dropdown">
+              <option value="">Semua Kategori</option>
+              <option value="Teknologi Informasi">Teknologi Informasi</option>
+              <option value="Peralatan Kantor">Peralatan Kantor</option>
+              <option value="Infrastruktur IT">Infrastruktur IT</option>
+              <option value="Furnitur Kantor">Furnitur Kantor</option>
+            </select>
+            
+            <select id="sort-price" class="form-control select-dropdown">
+              <option value="">Urutkan Harga</option>
+              <option value="low-high">Harga: Rendah ke Tinggi</option>
+              <option value="high-low">Harga: Tinggi ke Rendah</option>
+            </select>
+
+            <select id="filter-skp" class="form-control select-dropdown">
+              <option value="">Semua Penilaian SKP</option>
+              <option value="good">SKP Layak (>= 2.5)</option>
+              <option value="bad">Peringatan SKP (< 2.5)</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" id="btn-sync-katalog">
+            <span id="sync-spinner" class="spinner" style="display: none;">🌀</span>
+            <span id="sync-text">Sinkronisasi e-Katalog</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Catalog Products Grid -->
+      <div class="products-grid" id="products-grid">
+        <!-- Dynamically rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Specifications Detail Modal (FR-10) -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-product-name">Detail Produk</h3>
+        <button class="modal-close" onclick="closeProductModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-product-body">
+        <!-- Dynamically populated by JS -->
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--glass-border); padding-top: 16px;">
+        <button class="btn btn-secondary" onclick="closeProductModal()">Tutup</button>
+        <button class="btn btn-primary" id="modal-btn-add-cart">Tambah ke Keranjang</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="global.js"></script>
+  <script src="katalog.js"></script>
+</body>
+</html>
